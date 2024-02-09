@@ -5,20 +5,24 @@
 // input[1] = message why quit (optional)
 int quit(IRCServer &server, Client &client, std::vector<std::string> &arguments)
 {
-	std::vector<Channel *> channels = client.getChannels();
+    std::vector<Channel *> channels = client.getChannels();
 
-	if (arguments.size() < 2)
-	{
+    // Définir un message de départ par défaut.
+    std::string quitMessage = "Client quit";
+    if (arguments.size() > 1) {
 		client.msg(ERR_NEEDMOREPARAMS(client.getNickname(), arguments[0]));
-		return 0;
-	}
+        quitMessage = arguments[1];
+    }
 
-	// Notify other clients in the channels that this client is part of.
-	for (std::vector<Channel *>::iterator channel = channels.begin(); channel != channels.end(); channel++)
-		(*channel)->sendToChannel(QUIT(client.getNickname(), client.getUsername(), arguments[1].substr(1)),&client);
+    // Notifier les autres clients dans les canaux dont ce client est membre.
+    for (std::vector<Channel *>::iterator it = channels.begin(); it != channels.end(); ++it) {
+        Channel* channel = *it;
+        // Envoyer le message de départ à chaque canal.
+        channel->sendToChannel(QUIT(client.getNickname(), client.getUsername(), quitMessage), &client);
+    }
 
-	// Disconnect the client.
-	server.removeClient(client.getFd());
+    // Déconnecter le client.
+    server.removeClient(client.getFd());
 
-	return 1;
+    return 1; // Succès
 }

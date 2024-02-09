@@ -29,8 +29,8 @@ Channel::Channel(IRCServer &server,std::string name, Client *client)
 }
 
 Channel::~Channel(){
-	/*for (std::map<int, Client*>::iterator it = _users.begin(); it != _users.end(); ++it)
-			it->second->quitChannel(this);*/
+	for (std::map<int, Client*>::iterator it = _users.begin(); it != _users.end(); ++it)
+			it->second->quitChannel(this);
 };
 
 std::string Channel::getName(){return (this->_name);}
@@ -102,7 +102,7 @@ void Channel::addUser(Client *user)
 	int fd =user->getFd();
 	if (_users.find(fd) != _users.end())
 	{
-		user->msg("User is already in channel");
+		//user->msg("User is already in channel");
 		return;
 	}
 	_users[fd] = user;
@@ -128,10 +128,8 @@ void Channel::removeUser(Client *user)
 		removeOperator(user); 
 		if (_operators.empty() && !_users.empty())
 			addOperator(_users.begin()->second);
-
-		// Vérifier si le canal est vide et sans opérateurs, puis le supprimer.
 		if (_users.empty() && _operators.empty())
-		   _server.removeChannel(this); // Assurez-vous que removeChannel prend un pointeur vers Channel
+		   _server.removeChannel(this); 
 	}
 }
 /********************operator************************/
@@ -140,15 +138,12 @@ void Channel::addOperator(Client* user)
 	// Vérifier si l'utilisateur est présent dans la map _users
 	if (_users.find(user->getFd()) != _users.end())
 	{
-		std::cout << "je cherche dans la map users" << std::endl;
 		// Vérifier si l'utilisateur n'est pas déjà dans le vecteur _operators
 		bool userFound = false;
 		for (std::vector<Client*>::iterator it = _operators.begin(); it != _operators.end(); ++it)
 		{
-			std::cout << "je cherche dans le vec oper" << std::endl;
 			if (*it == user)
 			{
-				std::cout << "le user est deja oper donc je break" << std::endl;
 				userFound = true;
 				break;
 			}
@@ -157,7 +152,6 @@ void Channel::addOperator(Client* user)
 		{
 			_operators.push_back(user);
 			//user->setOp(true);
-			std::cout << "je suis ajoute dans la liste" << std::endl;
 		}
 	}
 }
@@ -205,23 +199,19 @@ Client* Channel::getClientByNickname(const std::string &nickname)
 
 void Channel::addInvite(Client *user)
 {
-   if (_users.find(user->getFd()) != _users.end())
+	bool userFound = false;
+	for (std::vector<Client*>::iterator it = _inviteList.begin(); it != _inviteList.end(); ++it)
 	{
-		// Vérifier si l'utilisateur n'est pas déjà dans le vecteur _banList
-		bool userFound = false;
-		for (std::vector<Client*>::iterator it = _inviteList.begin(); it != _inviteList.end(); ++it)
+		if (*it == user)
 		{
-			if (*it == user)
-			{
-				userFound = true;
-				break;
-			}
+			userFound = true;
+			break;
 		}
+	}
 
-		if (!userFound)
-		{
-			_inviteList.push_back(user);
-		}
+	if (!userFound)
+	{
+		_inviteList.push_back(user);
 	}
 }
 
@@ -241,15 +231,11 @@ int Channel::isInvited(Client *user)
 {
 	if (!user)
 		return 0;
-	std::map<int, Client*>::iterator userIt = _users.find(user->getFd());
-	if (userIt != _users.end())
+	std::vector<Client*>::iterator invitedIt;
+	for (invitedIt = _inviteList.begin(); invitedIt != _inviteList.end(); ++invitedIt)
 	{
-		std::vector<Client*>::iterator invitedIt;
-		for (invitedIt = _inviteList.begin(); invitedIt != _inviteList.end(); ++invitedIt)
-		{
-			if (*invitedIt == user)
-				return 1;
-		}
+		if (*invitedIt == user)
+			return 1;
 	}
 	return 0;
 }
@@ -300,4 +286,19 @@ bool Channel::validateJoin(Client *client, const std::vector<std::string> &input
 	}
 
 	return true;
+}
+void Channel::kickClient(Client* kicker, Client* clientToKick, const std::string& reason)
+{
+    if (!kicker || !clientToKick) {
+        // Gestion des cas où les pointeurs sont nuls
+        return;
+    }
+
+    std::string kickMessage = KICK(kicker->getNickname(), kicker->getUsername(), getName(), clientToKick->getNickname(), reason);
+
+    clientToKick->msg(kickMessage);
+
+    sendToChannel(kickMessage, clientToKick);
+
+    removeUser(clientToKick);
 }

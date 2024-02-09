@@ -17,11 +17,6 @@ void splitMessage(std::vector<std::string> &vcmds, std::string &msg)
 		end = msg.find(delim, start);
 		vcmds.push_back(msg.substr(start, end - start));
 	}
-
-	// for (size_t i = 0; i != vcmds.size(); i++)
-	// {
-	// 	std::cout << vcmds[i];
-	// }
 	return;
 }
 
@@ -83,7 +78,7 @@ void IRCServer::NewMsg(int client_fd)
 		}
 		else if (bytes_read == 0)
 		{
-			client->setPartialInput(client->getPartialInput() + std::string(buffer));
+
 			return;
 		}
 		buffer[bytes_read] = '\0'; // Terminer la chaîne avec un caractère nul pour en faire une chaîne de caractères C
@@ -91,10 +86,6 @@ void IRCServer::NewMsg(int client_fd)
 		std::cout << "[Client] Message received from client " <<  id << " : " << buffer << std::endl; // si affichage incoherent regarder ici
 		std::string partialInput = client->getPartialInput() + std::string(buffer);
 		client->setPartialInput(partialInput);
-
-		for (int i = 0; i < bytes_read; i++)
-			buffer[i] = '\0';
-
 	
 		if (!partialInput.empty() && partialInput[partialInput.size() - 1] == '\n')
 		{
@@ -169,8 +160,6 @@ Client* IRCServer::getClientByUsername(const std::string& username) {
 void IRCServer::MsgForListClient(const std::string &message) {
 	std::map<int, Client*>::iterator it;
 	for (it = clients.begin(); it != clients.end(); ++it) {
-		// Utilisation de it->first pour accéder au descripteur de fichier (fd)
-		// Utilisation de it->second pour accéder au nom (name) du client
 		sendMessage(it->first, message);
 	}
 }
@@ -185,11 +174,9 @@ void IRCServer::addChanell(Channel* channel)
     {
         if (*it == channel)
         {
-           std::cout<<"Le canal existe déjà, ne rien faire"<<std::endl;
             return;
         }
     }
-	std::cout<<"Le canal n'est pas encore présent, ajout au vecteur"<<std::endl;
     chanells.push_back(channel);
 }
 
@@ -200,9 +187,7 @@ void IRCServer::removeChannel(Channel* channel)
 
     if (it != chanells.end())
     {
-        std::cout<<"supprime canal"<<std::endl;
         delete *it;
-		std::cout<<"Supprime l'entrée correspondante du vecteur"<<std::endl;
         chanells.erase(it);
     }
 }
@@ -281,8 +266,7 @@ void	IRCServer::initCommands( void )
 {
 	_commands.insert(std::pair<std::string, int (*)(IRCServer&, Client&, std::vector<std::string>&)>("CAP", &cap));
 	_commands.insert(std::pair<std::string, int (*)(IRCServer&, Client&, std::vector<std::string>&)>("NICK", &nick));
-	//_commands.insert(std::pair<std::string, int (*)(IRCServer&, Client&, std::vector<std::string>&)>("KILL", &kill));
-	//_commands.insert(std::pair<std::string, int (*)(IRCServer&, Client&, std::vector<std::string>&)>("KICK", &kick));
+	_commands.insert(std::pair<std::string, int (*)(IRCServer&, Client&, std::vector<std::string>&)>("KICK", &kick));
 	_commands.insert(std::pair<std::string, int (*)(IRCServer&, Client&, std::vector<std::string>&)>("INVITE", &invite));
 	_commands.insert(std::pair<std::string, int (*)(IRCServer&, Client&, std::vector<std::string>&)>("JOIN", &join));
 	_commands.insert(std::pair<std::string, int (*)(IRCServer&, Client&, std::vector<std::string>&)>("MODE", &mode));
@@ -300,48 +284,3 @@ void	IRCServer::initCommands( void )
 	_commands.insert(std::pair<std::string, int (*)(IRCServer&, Client&, std::vector<std::string>&)>("WHOIS", &whois));
 	_commands.insert(std::pair<std::string, int (*)(IRCServer&, Client&, std::vector<std::string>&)>("WHO", &who));
 }
-/*
-int fct(IRCServer& IRCServer, Client& client, std::vector<std::string>& args)
-{
-  // Traiter la commande CAP
-  return 0;
-}
-
-	Commandes de messagerie
-
-	PRIVMSG : permet à l'utilisateur d'envoyer un message privé à un autre utilisateur.
-	NOTICE : permet à l'utilisateur d'envoyer un message de notification à un autre utilisateur.
-	WALLOPS : permet à l'utilisateur d'envoyer un message à tous les utilisateurs présents sur le serveur.
-	AWAY : permet à l'utilisateur de signaler qu'il est absent.
-	WHOIS : permet à l'utilisateur d'obtenir des informations sur un autre utilisateur.
-	WHO : permet à l'utilisateur d'obtenir la liste des utilisateurs présents sur le serveur.
-
-Commandes de contrôle
-
-	KILL : déconnecte l'utilisateur de force de tous les canaux et le met hors ligne
-	DIE : permet à l'utilisateur de se déconnecter du serveur.
-	QUIT : permet à l'utilisateur de se déconnecter du serveur.
-	PART:La commande PART permet à un utilisateur de quitter un salon IRC
-	PING : permet à l'utilisateur de vérifier si le serveur est en ligne.
-	PONG : réponse au message PING.//c'est pas obligatoire  
-
-Commandes de gestion
-
-	ADMIN : permet à l'utilisateur de gérer le serveur.
-	OPER : permet à l'utilisateur de gérer le serveur.
-	MODE : permet à l'utilisateur de modifier les modes d'un salon ou d'un utilisateur.
-	TOPIC : permet à l'utilisateur de définir ou de modifier le sujet d'un salon.
-	INVITE : permet à l'utilisateur d'inviter un autre utilisateur à rejoindre un salon.
-	KICK : permet à l'utilisateur de retirer un autre utilisateur d'un salon specifique
-	JOIN:La commande JOIN permet à un utilisateur de rejoindre un salon IRC
-	NAME:La commande NAME permet à un utilisateur de définir son pseudonyme (ou nick) sur un serveur IRC. La syntaxe de la commande NAME est la suivante :NAME [nick]
-
-
-Commandes avancées
-
-	CAP : permet à l'utilisateur de négocier les fonctionnalités avec le serveur.
-	INFO : permet à l'utilisateur d'obtenir des informations sur le serveur.
-	STATS : permet à l'utilisateur d'obtenir des informations statistiques sur le serveur.//je pense c'est obligatoire pour notre projet
-	SERVLIST : permet à l'utilisateur d'obtenir la liste des serveurs disponibles.//je pense c'est obligatoire pour notre projet
-	CONNECT : permet à l'utilisateur de se connecter à un autre serveur.//pareil
-*/

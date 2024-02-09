@@ -18,7 +18,7 @@
 # include "Ircserver.hpp"
 # include "Client.hpp"
 
-#define MAX_DEFAULT  1024;
+#define MAX_DEFAULT  4;
 
 
 class Client;
@@ -79,6 +79,7 @@ class Channel
 		int isOperator(Client *user);
 		void sendToChannel(const std::string &message,Client *sender);
 		Client* getClientByNickname(const std::string &nickname);  
-	
+		void kickClient(Client* kicker, Client* clientToKick, const std::string& reason);
+
 };
 #endif

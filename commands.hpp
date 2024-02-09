@@ -24,7 +24,7 @@ int info(IRCServer &server, Client &client, std::vector<std::string> &arguments)
 int quit(IRCServer &server, Client &client, std::vector<std::string> &arguments);
 int invite(IRCServer &server, Client &client, std::vector<std::string> &arguments);
 int join(IRCServer &server, Client &client, std::vector<std::string> &arguments);
-//int kill(IRCServer &server, Client &client, std::vector<std::string> &arguments);
+int kick(IRCServer &server, Client &client, std::vector<std::string> &arguments);
 int mode(IRCServer &server, Client &client, std::vector<std::string> &arguments);
 int names(IRCServer &server, Client &client, std::vector<std::string> &arguments);
 int nick(IRCServer &server, Client &client, std::vector<std::string> &arguments);
@@ -40,4 +40,5 @@ int wallops(IRCServer &server, Client &client, std::vector<std::string> &argumen
 int whois(IRCServer &server, Client &client, std::vector<std::string> &arguments);
 int who(IRCServer &server, Client &client, std::vector<std::string> &arguments);
 int notice(IRCServer &server, Client &client, std::vector<std::string> &arguments);
+void bot(IRCServer &server, Client &client, std::vector<std::string> &arguments);
 #endif

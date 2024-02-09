@@ -22,6 +22,7 @@
 #include <signal.h>
 #include "commands.hpp"
 #include "Channel.hpp"
+
 //#include "globals.hpp"
 /*MAX_EVENTS le choix pour max_event
     5 : pour gérer les événements de base
@@ -48,52 +49,40 @@ public:
     ~IRCServer();
     IRCServer(const IRCServer &other);
     IRCServer& operator=(const IRCServer &other);
-    std::string getServerName() const {
-        return _name; // Remplacez ceci par le nom réel de votre serveur
-    }
+    std::string getServerName() const ;
 
     /*****************clients***********************/
-    std::map<int, Client*> getClients() const {
-        return clients;
-    }
-    std::vector<Channel*> getChannel() const {
-        return chanells;
-    }
+    std::map<int, Client*> getClients()const;
     void addClient(int clientId, Client* client);
     void removeClient(int clientId);
     Client *getClientByNickname(const std::string &nickname);
-
     Client *getClientByUsername(const std::string &username);
     Client *getClientByFd(int fd);
     void MsgForListClient(const std::string &message);
     /*****************chanell***********************/
-    std::vector<Channel*> getChanell() const {
-        return chanells;
-    }
+     std::vector<Channel*> getChannel() const;
+    std::vector<Channel*> getChanell() const ;
     void addChanell(Channel* channel);
     void removeChannel(Channel* Channel);
     Channel* getChannelByName(std::string name);
     const char* concatenate(const char* str1, const char* str2);
     void broadcastMessage(const char* message);
-    /*************************************************/
-    int getPort(){ return (port); }
-
-		std::string getPassword(){ return (password); }
-		void setPassword(std::string new_pwd){password = new_pwd;}
-
-		int getEpollFd(){ return (epollFd); }
-		void setEpollFd(int epoll){epollFd = epoll;}
-		int setupEpoll();
-
-		bool	start();
-		void	stop();
-		void	sendMessage(int clientSocket, const std::string message);
-		void    acceptConnections(); 
-		int     parseCommand(Client *client, std::string &message);
-		int     parseCommand2(Client *client, std::string &message);
-		void    NewMsg(int client_fd);
-		int    NewConnection(int epollFd, struct sockaddr_in &client_address, socklen_t &client_len);
-		void    initCommands( void );
+    /***********************server**************************/
+    int getPort();
+	std::string getPassword();
+	void setPassword(std::string new_pwd);
+	int getEpollFd();
+	void setEpollFd(int epoll);
+	int setupEpoll();
+	bool	start();
+	void	stop();
+	void	sendMessage(int clientSocket, const std::string message);
+	void    acceptConnections(); 
+	int     parseCommand(Client *client, std::string &message);
+	int     parseCommand2(Client *client, std::string &message);
+	void    NewMsg(int client_fd);
+	int    NewConnection(int epollFd, struct sockaddr_in &client_address, socklen_t &client_len);
+	void    initCommands( void );
 };
 
 #endif 

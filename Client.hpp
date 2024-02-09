@@ -27,37 +27,35 @@ class Client
 	public:
 		Client(int fd, const std::string name);
 		~Client();
-		void msg(const std::string &message) 
-		{
-		if (_fd)
-			send(_fd, message.c_str(), message.size(), 0);
-		}
+		void msg(const std::string &message) ;
 		int			getFd() { return _fd; };
-		std::string getHostname() { return _hostname; };
-		std::string getUsername() { return _username; };
-		std::string getNickname() { return _nickname; };
-		std::string getRealname() { return _realname; };
-		std::string getPartialInput() { return _partialInput; };
-		bool 		getRegistered() { return _isRegistered; };
-		bool 		getAuth() { return _isAuth; };
-		bool 		getOp() { return _isOp; };
-		bool 		getInvisible() { return _isInvisible; };
-		bool 		getWallops() { return _isWallops; };
-		void 		setFd(int &fd ) { _fd = fd; };
-		void 		setHostname(std::string const &hostname ) { _hostname = hostname; };
-		void 		setUsername(std::string const &username ) { _username = username; };
-		void 		setNickname(std::string const &nickname ) { _nickname = nickname; };
-		void 		setRealname(std::string const &realname ) { _realname = realname; };
-		void 		setPartialInput(std::string const &partialInput ) { _partialInput = partialInput; };
-		void 		setRegistered(bool isRegistered) { _isRegistered = isRegistered; };
-		void 		setAuth(bool isAuth) { _isAuth = isAuth; };
-		void 		setOp(bool isOp) { _isOp = isOp; };
-		void 		setInvisible(bool isInvisible) { _isInvisible = isInvisible; };
-		void 		setWallops(bool isWallops) { _isWallops = isWallops; };
-		std::vector<Channel *> getChannels() { return _channels; };
+		std::string getHostname() ;
+		std::string getUsername(); 
+		std::string getNickname() ;
+		std::string getRealname() ;
+		std::string getPartialInput() ;
+		bool 		getRegistered() ;
+		bool 		getAuth() ;
+		bool 		getOp(); 
+		bool 		getInvisible() ;
+		bool 		getWallops() ;
+		void 		setFd(int &fd ) ;
+		void 		setHostname(std::string const &hostname ); 
+		void 		setUsername(std::string const &username ) ;
+		void 		setNickname(std::string const &nickname ) ;
+		void 		setRealname(std::string const &realname ); 
+		void 		setPartialInput(std::string const &partialInput ); 
+		void 		setRegistered(bool isRegistered); 
+		void 		setAuth(bool isAuth) ;
+		void 		setOp(bool isOp); 
+		void 		setInvisible(bool isInvisible); 
+		void 		setWallops(bool isWallops); 
+		std::vector<Channel *> getChannels() ;
 		Channel*	getChannel(const std::string channelName);
 		void		joinChannel(Channel *channel);
 		void		quitChannel(Channel *channel);
 		void		quitChannels();
+		bool 		isInChannel(const std::string& channelName) const ;
+
 };
 #endif

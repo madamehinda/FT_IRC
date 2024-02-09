@@ -3,9 +3,11 @@
 #include "Client.hpp"
 #include "globals.hpp"
 #include <sys/select.h>
-
+/* nc localhost 9090
+nick imen
+user imraoui 0 * imraoui
+join #ab*/
 IRCServer::IRCServer(int port, std::string password) : serverSocket(-1), port(port), password(password),epollFd(-1) {
-	// Votre code de construction ici, si nécessaire
 }
 
 IRCServer::~IRCServer() {
@@ -36,11 +38,7 @@ IRCServer& IRCServer::operator=(const IRCServer &other)
    }
    return(*this);
 }
-/*void IRCServer::handlePingCommand(IRCServer *server, Client *client, const std::string &message)
-{
-  // Envoi un message de pong au client
-  server->sendMessage(client->getFd(), "PONG :");
-}*/
+
 bool IRCServer::start()
 { 
 	/************************creation de socket**********************************/ 

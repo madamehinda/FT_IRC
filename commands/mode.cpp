@@ -1,4 +1,3 @@
-
 #include "../commands.hpp"
 #include <string>
 
@@ -115,6 +114,9 @@ int channelMode(IRCServer &server, Client &client, std::vector<std::string> &arg
 	bool add = true;
 	std::string output = "";
 
+	// if (arguments.size() < 3)
+	// 	return 0;
+
 	for (size_t i = 0; i < arguments[2].size(); i++)
 	{
 		char mode = arguments[2][i];
@@ -133,7 +135,7 @@ int channelMode(IRCServer &server, Client &client, std::vector<std::string> &arg
 		else if (mode == 'o')
 		{
 			handleOperator(add, server, channel, client, arguments);
-			names(server, client, arguments);
+			names(server,client,arguments);
 		}
 		else if (mode == 'l')
 			handleUserLimit(add, channel, client, arguments);

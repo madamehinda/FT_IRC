@@ -2,13 +2,14 @@ SRCS	= $(shell find . -name "*.cpp")
 
 HEADERS = $(shell find . -name "*.hpp")
 
+
 OBJS	= ${SRCS:.cpp=.o}
 
 NAME	= ircserv
 
 CC		= c++
 
-CFLAGS	= -Wall -Werror -Wextra -std=c++98 -g3 -O0
+CFLAGS	= -Wall -Werror -Wextra -std=c++98 
 
 RM		= rm -rf
 

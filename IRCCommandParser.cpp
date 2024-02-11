@@ -264,7 +264,7 @@ int IRCServer::NewConnection(int epollFd, struct sockaddr_in &client_address, so
 
 void	IRCServer::initCommands( void )
 {
-	_commands.insert(std::pair<std::string, int (*)(IRCServer&, Client&, std::vector<std::string>&)>("CAP", &cap));
+	//_commands.insert(std::pair<std::string, int (*)(IRCServer&, Client&, std::vector<std::string>&)>("CAP", &cap));
 	_commands.insert(std::pair<std::string, int (*)(IRCServer&, Client&, std::vector<std::string>&)>("NICK", &nick));
 	_commands.insert(std::pair<std::string, int (*)(IRCServer&, Client&, std::vector<std::string>&)>("KICK", &kick));
 	_commands.insert(std::pair<std::string, int (*)(IRCServer&, Client&, std::vector<std::string>&)>("INVITE", &invite));
@@ -280,7 +280,7 @@ void	IRCServer::initCommands( void )
 	_commands.insert(std::pair<std::string, int (*)(IRCServer&, Client&, std::vector<std::string>&)>("QUIT", &quit));
 	_commands.insert(std::pair<std::string, int (*)(IRCServer&, Client&, std::vector<std::string>&)>("TOPIC", &topic));
 	_commands.insert(std::pair<std::string, int (*)(IRCServer&, Client&, std::vector<std::string>&)>("USER", &user));
-	_commands.insert(std::pair<std::string, int (*)(IRCServer&, Client&, std::vector<std::string>&)>("WALLOPS", &wallops));//on garde ?
-	_commands.insert(std::pair<std::string, int (*)(IRCServer&, Client&, std::vector<std::string>&)>("WHOIS", &whois));
+	//_commands.insert(std::pair<std::string, int (*)(IRCServer&, Client&, std::vector<std::string>&)>("WALLOPS", &wallops));//on garde ?
+	//_commands.insert(std::pair<std::string, int (*)(IRCServer&, Client&, std::vector<std::string>&)>("WHOIS", &whois));
 	_commands.insert(std::pair<std::string, int (*)(IRCServer&, Client&, std::vector<std::string>&)>("WHO", &who));
 }

@@ -66,6 +66,13 @@ void Channel::isValidChannelName(std::string &channelName)
 		throw std::invalid_argument("Channel name too long");
 	if(channelName.size() < 2)
 		throw std::invalid_argument("Channel name too small");
+	// if(channelName[0] != '#' && channelName[0] != '&')
+	// 	throw std::invalid_argument("Channel name must start with # or &");
+	// for (size_t i = 1; i < channelName.size(); i++)
+	// {
+	// 	if (!std::isalnum(channelName[i]) && channelName[i] != '-' && channelName[i] != '_')
+	// 		throw std::invalid_argument("Channel name contains forbidden characters");
+	// }
 }
 
 bool Channel::isValidChannelPassword(std::string &password)

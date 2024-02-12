@@ -26,13 +26,12 @@
 
 int part(IRCServer &server, Client &client, std::vector<std::string> &arguments)
 {
-	if (arguments.size() < 1)
+	if (arguments.size() < 2)
 	{
 		std::cout << "arg pbm" << std::endl;
 		client.msg(ERR_NEEDMOREPARAMS(client.getNickname(), arguments[0]));
 		return (0);
 	}
-
 	if (!client.getRegistered() && !client.getAuth())
 	{
 		std::cout << "client not registered" << std::endl;
@@ -41,6 +40,13 @@ int part(IRCServer &server, Client &client, std::vector<std::string> &arguments)
 	}
 
 	//std::vector<std::string> channels = splitChan(arguments[1], ',');
+	if (arguments[1].empty())
+	{
+		std::cout << "no channel" << std::endl;
+		client.msg(ERR_NEEDMOREPARAMS(client.getNickname(), arguments[0]));
+		return (0);
+	}
+	else {
 
 	Channel *channelToLeave = server.getChannelByName(arguments[1].substr(1));
 	if (!channelToLeave)
@@ -66,4 +72,6 @@ int part(IRCServer &server, Client &client, std::vector<std::string> &arguments)
 
 	client.quitChannel(channelToLeave);
 	return (1);
+	}
+
 }

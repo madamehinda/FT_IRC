@@ -18,7 +18,6 @@
 # include "Ircserver.hpp"
 # include "Client.hpp"
 
-#define MAX_DEFAULT  4;
 
 
 class Client;

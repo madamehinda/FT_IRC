@@ -67,7 +67,9 @@ void handleChannelPassword(bool add, Channel* channel, Client& client, std::vect
 	if (add)
 	{
 		if (arguments.size() < 4)
+		{
 			return(client.msg(ERR_NEEDMOREPARAMS(client.getNickname(), "MODE")));
+		}
 		channel->setChannelPassword(arguments[3]);
 	}
 	else
@@ -91,10 +93,19 @@ void handleOperator(bool add, IRCServer &server, Channel *channel, Client& clien
 
 void handleUserLimit(bool add, Channel* channel, Client& client, std::vector<std::string>& arguments)
 {
+	std::cout << "handle user limit" << std::endl;
 	if (add)
 	{
+		std::cout << "apres add" << std::endl;
 		if (arguments.size() < 4)
-			return (client.msg(ERR_NEEDMOREPARAMS(client.getNickname(), arguments[0])));
+		{
+			std::cout << "size inf 4" << std::endl;
+			client.msg(ERR_NEEDMOREPARAMS(client.getNickname(), arguments[0]));
+			return;
+		}
+		//channel->setMaxUsers(MAX_DEFAULT);
+		//std::cout << "Max default  " << channel->getMaxUsers() << std::endl;
+		std::cout << "max users " << std::atoi(arguments[3].c_str()) << std::endl;
 		channel->setMaxUsers(std::atoi(arguments[3].c_str()));//set the max users
 	}
 	else
@@ -138,9 +149,13 @@ int channelMode(IRCServer &server, Client &client, std::vector<std::string> &arg
 			names(server,client,arguments);
 		}
 		else if (mode == 'l')
+		{ 
+			//std::cout <<"mode + l "<<std::endl;
 			handleUserLimit(add, channel, client, arguments);
+		}
 		else
 		{
+			//std::cout << "mode inconnu msg" << std::endl;
 			client.msg(ERR_UMODEUNKNOWNFLAG(client.getNickname()));
 			continue;
 		}

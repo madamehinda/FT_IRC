@@ -16,7 +16,7 @@ Client::Client(int fd, std::string name) :
 	_isWallops(false)
 	{ }
 Client::~Client() {
-	quitChannels();
+	//quitChannels();
 }
 void	Client::joinChannel(Channel *channel)
 {

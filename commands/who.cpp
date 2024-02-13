@@ -7,12 +7,12 @@ int who(IRCServer &server, Client &client, std::vector<std::string> &arguments) 
 
         if (channel) {
             // Afficher le nom du canal
-            std::cout << "Channel Name: " << channelName << std::endl;
+            //std::cout << "Channel Name: " << channelName << std::endl;
 			std::vector<Client*> operatorsList = channel->getOperators();
 
             // Afficher les informations sur chaque client dans le canal
             std::map<int, Client*> clientsMap = channel->getClients();
-            std::cout << "Number of Clients in Channel: " << clientsMap.size() << std::endl;
+            //std::cout << "Number of Clients in Channel: " << clientsMap.size() << std::endl;
 
             // Envoyer les messages RPL_WHOREPLY et RPL_ENDOFWHO à l'utilisateur
             for (std::map<int, Client*>::iterator it = clientsMap.begin(); it != clientsMap.end(); ++it) {
@@ -37,7 +37,7 @@ client.msg(endOfWho);
             client.msg(RPL_ENDOFWHO(client.getNickname(), channelName));
         } else {
             // Afficher un message si le canal n'existe pas
-            std::cout << "Channel does not exist: " << channelName << std::endl;
+            //std::cout << "Channel does not exist: " << channelName << std::endl;
             client.msg(ERR_NOSUCHCHANNEL(client.getNickname(), channelName));
         }
     } else {

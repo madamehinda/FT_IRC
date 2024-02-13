@@ -18,19 +18,20 @@ Channel::Channel(IRCServer &server,std::string name, Client *client)
 	this->_name = name;
 	this->_topic = "";
 	this->_channelPassword = "";
-	this->_maxUsers = MAX_DEFAULT;
+	this->_maxUsers = 0;
 	this->_inviteOnly = false;
 	this->_users.clear();
 	this->_operators.clear();
 	this->_inviteList.clear();
+	this->_topicRestricted = false;
 	addUser(client);// le client qui cree le channel est dans le channel
 	addOperator(client);// le client qui cree le channel est operator
 	
 }
 
 Channel::~Channel(){
-	for (std::map<int, Client*>::iterator it = _users.begin(); it != _users.end(); ++it)
-			it->second->quitChannel(this);
+	/*for (std::map<int, Client*>::iterator it = _users.begin(); it != _users.end(); ++it)
+			it->second->quitChannel(this);*/
 };
 
 std::string Channel::getName(){return (this->_name);}
